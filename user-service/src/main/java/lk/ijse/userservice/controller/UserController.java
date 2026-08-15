@@ -1,7 +1,10 @@
 package lk.ijse.userservice.controller;
 
+import jakarta.validation.Valid;
+import lk.ijse.userservice.dtos.*;
 import lk.ijse.userservice.entity.User;
 import lk.ijse.userservice.service.UserService;
+import lk.ijse.userservice.util.APIResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,38 +30,78 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> saveUser(@RequestBody User user) {
-        return new ResponseEntity<>(
-                userService.saveUser(user),
-                HttpStatus.CREATED
-        );
+    public ResponseEntity<APIResponse<UserResponse>> saveUser(@Valid @RequestBody UserCreateRequest user) {
+
+        UserResponse userResponse = userService.saveUser(user);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new APIResponse<>(
+                        201,
+                        "User saved!",
+                        userResponse
+                ));
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<APIResponse<List<UserResponse>>> getAllUsers() {
         return ResponseEntity.ok(
-                userService.getAllUsers()
+                new APIResponse<>(
+                        200,
+                        "User retrieved",
+                        userService.getAllUsers()
+                )
         );
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+    public ResponseEntity<APIResponse<UserResponse>> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(
-                userService.getUserById(id)
+                new APIResponse<>(
+                        200,
+                        "User found!",
+                        userService.getUserById(id)
+                )
         );
     }
 
-    @GetMapping("/email/{email}")
-    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
+    @PutMapping
+    public ResponseEntity<APIResponse<UserResponse>> updateUser(
+            @PathVariable Long id,
+            @Valid @RequestBody UserUpdateRequest user) {
+
         return ResponseEntity.ok(
-                userService.getUserByEmail(email)
+                new APIResponse<>(
+                        200,
+                        "User updated!",
+                        userService.updateUser(id, user)
+                )
         );
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<APIResponse<Void>> deleteUser(@PathVariable Long id) {
+
         userService.deleteUser(id);
-        return ResponseEntity.ok("User deleted successfully.");
+
+        return ResponseEntity.ok(
+                new APIResponse<>(
+                        200,
+                        "User deleted!",
+                        null
+                )
+        );
+    }
+
+    @PostMapping("login")
+    public ResponseEntity<APIResponse<LoginResponse>> loginUser(@RequestBody LoginRequest loginRequest) {
+
+        return ResponseEntity.ok(
+                new APIResponse<>(
+                        200,
+                        "Login success!",
+                        userService.loginUser(loginRequest)
+                )
+        );
     }
 
 }

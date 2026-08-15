@@ -7,15 +7,22 @@ spring:
 
   cloud:
     gateway:
-      routes:
-        - id: user-service
-          uri: lb://USER-SERVICE
-          predicates:
-            - Path=/user-service/**
-          filters:
-            - StripPrefix=1
+      mvc:
+        routes:
+          - id: user-service
+            uri: lb://USER-SERVICE
+            predicates:
+              - Path=/user-service/**
+            filters:
+              - StripPrefix=1
 
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

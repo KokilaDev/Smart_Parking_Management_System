@@ -8,6 +8,17 @@ spring:
   config:
     import: optional:configserver:http://localhost:8888
 
+  cloud:
+    gateway:
+      mvc:
+        routes:
+          - id: user-service
+            uri: lb://USER-SERVICE
+            predicates:
+              - Path=/user-service/**
+            filters:
+              - StripPrefix=1
+
 eureka:
   client:
     service-url:

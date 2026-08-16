@@ -21,6 +21,11 @@ spring:
           predicates:
             - Path=/api/vehicles/**
 
+        - id: parking-service-route
+          uri: lb://PARKING-SERVICE
+          predicates:
+            - Path=/api/parking/**
+
       globalcors:
         cors-configurations:
           '[/**]':

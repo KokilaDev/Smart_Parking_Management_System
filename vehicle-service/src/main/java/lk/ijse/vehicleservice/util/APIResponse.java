@@ -1,4 +1,4 @@
-package lk.ijse.vehicleservice.dtos;
+package lk.ijse.vehicleservice.util;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
  * Author: Kokila Dewmini
  * GitHub: https://github.com/KokilaDev
  * --------------------------------------------
- * Created: 8/16/2026 8:23 PM
+ * Created: 8/16/2026 9:19 PM
  * Project: SPMS
  * --------------------------------------------
  */
@@ -17,13 +17,9 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class VehicleResponse {
+public class APIResponse<T> {
 
-    private Long id;
-    private String vehicleNumber;
-    private String vehicleType;
-    private String brand;
-    private String model;
-    private String color;
-    private Long ownerId;
+    private boolean success;
+    private String message;
+    private T data;
 }

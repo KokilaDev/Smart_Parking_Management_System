@@ -1,5 +1,8 @@
 package lk.ijse.vehicleservice.service;
 
+import lk.ijse.vehicleservice.dtos.VehicleCreateRequest;
+import lk.ijse.vehicleservice.dtos.VehicleResponse;
+import lk.ijse.vehicleservice.dtos.VehicleUpdateRequest;
 import lk.ijse.vehicleservice.entity.Vehicle;
 
 import java.util.List;
@@ -14,8 +17,10 @@ import java.util.List;
  * --------------------------------------------
  */
 public interface VehicleService {
-    Vehicle saveVehicle(Vehicle vehicle);
-    List<Vehicle> getAllVehicles();
-    Vehicle getVehicleById(Long id);
-    void deleteVehicleById(Long id);
+    VehicleResponse saveVehicle(VehicleCreateRequest request);
+    VehicleResponse updateVehicle(Long id, VehicleUpdateRequest request);
+    void deleteVehicle(Long id);
+    VehicleResponse getVehicle(Long id);
+    List<VehicleResponse> getAllVehicles();
+    List<VehicleResponse> getVehiclesByOwner(Long ownerId);
 }

@@ -1,8 +1,9 @@
 package lk.ijse.vehicleservice.dtos;
 
-import jakarta.validation.constraints.NotBlank;
-import lk.ijse.vehicleservice.entity.VehicleType;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
+
+import java.time.LocalDateTime;
 
 /**
  * --------------------------------------------
@@ -18,10 +19,13 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class VehicleUpdateRequest {
+public class VehicleEntryRequest {
 
-    private VehicleType vehicleType;
-    private String make;
-    private String model;
-    private String color;
+    @NotNull(message = "Vehicle ID is required")
+    private Long vehicleId;
+
+    @NotNull(message = "Parking space ID is required")
+    private Long parkingSpaceId;
+
+    private LocalDateTime entryTime;
 }

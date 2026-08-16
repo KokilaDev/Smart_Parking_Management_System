@@ -1,10 +1,11 @@
 package lk.ijse.vehicleservice.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 /**
  * --------------------------------------------
@@ -22,16 +23,41 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Vehicle {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String vehicleNumber;
-    private String vehicleType;
-    private String brand;
-    private String model;
-    private String color;
-    private Long ownerId;
 
+    @Column(name = "registration_number", nullable = false, unique = true)
+    private String registrationNumber;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "vehicle_type", nullable = false)
+    private VehicleType vehicleType;
+
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "parking_status", nullable = false)
+    private VehicleParkingStatus parkingStatus;
+
+    @Column(name = "current_parking_space_id")
+    private Long currentParkingSpaceId;
+
+    private String make;
+
+    private String model;
+
+    private String color;
+
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }

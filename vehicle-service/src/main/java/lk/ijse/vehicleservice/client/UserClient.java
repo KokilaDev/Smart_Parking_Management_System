@@ -1,9 +1,11 @@
 package lk.ijse.vehicleservice.client;
 
-import lk.ijse.vehicleservice.dtos.UserResponse;
+import lk.ijse.vehicleservice.dtos.UserDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * --------------------------------------------
@@ -16,8 +18,14 @@ import org.springframework.web.bind.annotation.PathVariable;
  */
 
 @FeignClient(name = "user-service")
-public interface UserServiceClient {
+public interface UserClient {
 
-    @GetMapping("/api/v1/users/{id}")
-    UserResponse getUserById(@PathVariable Long id);
+    @GetMapping("/api/users/{id}")
+    UserDto getUserById(@PathVariable("id") Long id);
+
+    @PostMapping("/api/users/{id}/logs")
+    void logUserActivity(
+            @PathVariable("id") Long id,
+            @RequestParam("activityType") String activityType,
+            @RequestParam("description") String description);
 }

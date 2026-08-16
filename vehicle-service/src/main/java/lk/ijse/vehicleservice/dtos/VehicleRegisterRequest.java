@@ -1,20 +1,16 @@
 package lk.ijse.vehicleservice.dtos;
 
-import lk.ijse.vehicleservice.entity.VehicleParkingStatus;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lk.ijse.vehicleservice.entity.VehicleType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
+import lombok.*;
 
 /**
  * --------------------------------------------
  * Author: Kokila Dewmini
  * GitHub: https://github.com/KokilaDev
  * --------------------------------------------
- * Created: 8/17/2026 12:01 AM
+ * Created: 8/16/2026 8:23 PM
  * Project: SPMS
  * --------------------------------------------
  */
@@ -23,17 +19,20 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class VehicleResponse {
+public class VehicleRegisterRequest {
 
-    private Long id;
+    @NotBlank(message = "Registration number is required")
     private String registrationNumber;
+
+    @NotNull(message = "Vehicle type is required (CAR, MOTORCYCLE, SUV, TRUCK, EV)")
     private VehicleType vehicleType;
+
+    @NotNull(message = "User ID is required")
     private Long userId;
-    private VehicleParkingStatus parkingStatus;
-    private Long currentParkingSpaceId;
+
     private String make;
+
     private String model;
+
     private String color;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

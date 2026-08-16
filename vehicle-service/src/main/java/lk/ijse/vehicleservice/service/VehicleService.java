@@ -1,9 +1,6 @@
 package lk.ijse.vehicleservice.service;
 
-import lk.ijse.vehicleservice.dtos.VehicleCreateRequest;
-import lk.ijse.vehicleservice.dtos.VehicleResponse;
-import lk.ijse.vehicleservice.dtos.VehicleUpdateRequest;
-import lk.ijse.vehicleservice.entity.Vehicle;
+import lk.ijse.vehicleservice.dtos.*;
 
 import java.util.List;
 
@@ -16,11 +13,30 @@ import java.util.List;
  * Project: SPMS
  * --------------------------------------------
  */
+
 public interface VehicleService {
-    VehicleResponse saveVehicle(VehicleCreateRequest request);
-    VehicleResponse updateVehicle(Long id, VehicleUpdateRequest request);
-    void deleteVehicle(Long id);
-    VehicleResponse getVehicle(Long id);
+
+    VehicleResponse registerVehicle(VehicleRegisterRequest request);
+
+    VehicleResponse getVehicleById(Long id);
+
+    VehicleResponse getVehicleByRegistrationNumber(String registrationNumber);
+
     List<VehicleResponse> getAllVehicles();
-    List<VehicleResponse> getVehiclesByOwner(Long ownerId);
+
+    List<VehicleResponse> getVehiclesByUserId(Long userId);
+
+    VehicleResponse updateVehicle(Long id, VehicleUpdateRequest request);
+
+    void deleteVehicle(Long id);
+
+    VehicleLogResponse simulateEntry(VehicleEntryRequest request);
+
+    VehicleLogResponse simulateExit(VehicleExitRequest request);
+
+    List<VehicleLogResponse> getLogsByVehicleId(Long vehicleId);
+
+    List<VehicleLogResponse> getLogsByUserId(Long userId);
+
+    List<VehicleLogResponse> getAllLogs();
 }

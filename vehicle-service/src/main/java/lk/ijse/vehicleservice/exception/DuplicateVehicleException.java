@@ -1,13 +1,17 @@
-package lk.ijse.vehicleservice.config;
+package lk.ijse.vehicleservice.exception;
 
 /**
  * --------------------------------------------
  * Author: Kokila Dewmini
  * GitHub: https://github.com/KokilaDev
  * --------------------------------------------
- * Created: 8/16/2026 9:11 PM
+ * Created: 8/16/2026 9:12 PM
  * Project: SPMS
  * --------------------------------------------
  */
-public class SecurityConfig {
+public class DuplicateVehicleException extends RuntimeException {
+
+    public DuplicateVehicleException(String message) {
+        super(message);
+    }
 }

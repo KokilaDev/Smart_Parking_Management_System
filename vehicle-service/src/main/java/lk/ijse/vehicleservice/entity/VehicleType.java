@@ -1,17 +1,18 @@
-package lk.ijse.vehicleservice.exception;
+package lk.ijse.vehicleservice.entity;
 
 /**
  * --------------------------------------------
  * Author: Kokila Dewmini
  * GitHub: https://github.com/KokilaDev
  * --------------------------------------------
- * Created: 8/16/2026 9:12 PM
+ * Created: 8/17/2026 12:07 AM
  * Project: SPMS
  * --------------------------------------------
  */
-public class VehicleNotFoundException extends RuntimeException {
-
-    public VehicleNotFoundException(String message) {
-        super(message);
-    }
+public enum VehicleType {
+    CAR,
+    MOTORCYCLE,
+    SUV,
+    TRACK,
+    EV
 }

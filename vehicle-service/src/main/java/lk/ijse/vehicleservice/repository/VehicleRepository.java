@@ -20,9 +20,9 @@ import java.util.Optional;
 @Repository
 public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
 
-    boolean existsByVehicleNumber(String vehicleNumber);
+    Optional<Vehicle> findByRegistrationNumber(String registrationNumber);
 
-    Optional<Vehicle> findByVehicleNumber(String vehicleNumber);
+    boolean existsByRegistrationNumber(String registrationNumber);
 
-    List<Vehicle> findByOwnerId(Long ownerId);
+    List<Vehicle> findByUserId(Long userId);
 }

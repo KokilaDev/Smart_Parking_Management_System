@@ -1,12 +1,11 @@
 package lk.ijse.vehicleservice.dtos;
 
-import lk.ijse.vehicleservice.entity.VehicleParkingStatus;
-import lk.ijse.vehicleservice.entity.VehicleType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -14,7 +13,7 @@ import java.time.LocalDateTime;
  * Author: Kokila Dewmini
  * GitHub: https://github.com/KokilaDev
  * --------------------------------------------
- * Created: 8/17/2026 12:01 AM
+ * Created: 8/16/2026 9:12 PM
  * Project: SPMS
  * --------------------------------------------
  */
@@ -23,17 +22,18 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class VehicleResponse {
+public class VehicleLogResponse {
 
     private Long id;
+    private Long vehicleId;
     private String registrationNumber;
-    private VehicleType vehicleType;
+    private Long parkingSpaceId;
     private Long userId;
-    private VehicleParkingStatus parkingStatus;
-    private Long currentParkingSpaceId;
-    private String make;
-    private String model;
-    private String color;
+    private LocalDateTime entryTime;
+    private LocalDateTime exitTime;
+    private Long durationMinutes;
+    private BigDecimal hourlyRate;
+    private BigDecimal totalFee;
+    private String status;
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

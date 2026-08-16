@@ -1,17 +1,15 @@
-package lk.ijse.vehicleservice.exception;
+package lk.ijse.vehicleservice.entity;
 
 /**
  * --------------------------------------------
  * Author: Kokila Dewmini
  * GitHub: https://github.com/KokilaDev
  * --------------------------------------------
- * Created: 8/16/2026 9:12 PM
+ * Created: 8/17/2026 12:05 AM
  * Project: SPMS
  * --------------------------------------------
  */
-public class DuplicateVehicleNumberException extends RuntimeException {
-
-    public DuplicateVehicleNumberException(String message) {
-        super(message);
-    }
+public enum VehicleParkingStatus {
+    OUT_OF_PARKING,
+    IN_PARKING
 }

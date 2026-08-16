@@ -29,8 +29,9 @@ public class Vehicle {
     private Long id;
     private String vehicleNumber;
     private String vehicleType;
+    private String brand;
     private String model;
     private String color;
-    private Long userId;
+    private Long ownerId;
 
 }

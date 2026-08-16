@@ -10,9 +10,9 @@ package lk.ijse.userservice.exception;
  * --------------------------------------------
  */
 
-public class UserNotFoundException extends RuntimeException{
+public class ResourceNotFoundException extends RuntimeException{
 
-    public UserNotFoundException(String message) {
+    public ResourceNotFoundException(String message) {
         super(message);
     }
 

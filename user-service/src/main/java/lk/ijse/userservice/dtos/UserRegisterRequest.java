@@ -17,26 +17,26 @@ import lombok.*;
  * --------------------------------------------
  */
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 @Data
-public class UserCreateRequest {
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class UserRegisterRequest {
 
-    @NotBlank(message = "name is required")
+    @NotBlank(message = "Name is required")
+    @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
     private String name;
 
-    @NotBlank(message = "email is required")
-    @Email(message = "Invalid email")
+    @NotBlank(message = "Email is required")
+    @Email(message = "Email should be valid")
     private String email;
 
-    @NotBlank
-    @Size(min = 4,message = "password must contain at least 4 characters")
+    @NotBlank(message = "Password is required")
+    @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
 
-    private String phoneNumber;
-
-    @NotNull(message = "role is required")
+    @NotNull(message = "Role is required (DRIVER, PARKING_OWNER, ADMIN)")
     private Role role;
+
+    private String phoneNumber;
 }

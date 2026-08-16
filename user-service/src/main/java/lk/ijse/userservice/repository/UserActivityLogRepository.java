@@ -1,26 +1,23 @@
 package lk.ijse.userservice.repository;
 
-import lk.ijse.userservice.entity.User;
+import lk.ijse.userservice.entity.UserActivityLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
 /**
  * --------------------------------------------
  * Author: Kokila Dewmini
  * GitHub: https://github.com/KokilaDev
  * --------------------------------------------
- * Created: 8/15/2026 1:00 PM
+ * Created: 8/16/2026 11:22 PM
  * Project: SPMS
  * --------------------------------------------
  */
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserActivityLogRepository extends JpaRepository<UserActivityLog, Long> {
 
-    boolean existsByEmail(String email);
-
-    Optional<User> findByEmail(String email);
-
+    List<UserActivityLog> findByUserIdOrderByTimestampDesc(Long userId);
 }

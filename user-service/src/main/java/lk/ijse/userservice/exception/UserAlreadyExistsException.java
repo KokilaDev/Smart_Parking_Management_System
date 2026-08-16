@@ -10,9 +10,9 @@ package lk.ijse.userservice.exception;
  * --------------------------------------------
  */
 
-public class DuplicateEmailException extends RuntimeException{
+public class UserAlreadyExistsException extends RuntimeException{
 
-    public DuplicateEmailException(String message) {
+    public UserAlreadyExistsException(String message) {
         super(message);
     }
 }

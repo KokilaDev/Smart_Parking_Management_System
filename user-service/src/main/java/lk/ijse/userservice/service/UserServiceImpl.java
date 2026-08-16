@@ -2,16 +2,19 @@ package lk.ijse.userservice.service;
 
 import lk.ijse.userservice.dtos.*;
 import lk.ijse.userservice.entity.User;
-import lk.ijse.userservice.exception.DuplicateEmailException;
+import lk.ijse.userservice.entity.UserActivityLog;
+import lk.ijse.userservice.exception.UserAlreadyExistsException;
 import lk.ijse.userservice.exception.InvalidCredentialsException;
-import lk.ijse.userservice.exception.UserNotFoundException;
+import lk.ijse.userservice.exception.ResourceNotFoundException;
+import lk.ijse.userservice.repository.UserActivityLogRepository;
 import lk.ijse.userservice.repository.UserRepository;
-import lk.ijse.userservice.security.JwtService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * --------------------------------------------
@@ -25,95 +28,128 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
+    private final UserActivityLogRepository activityLogRepository;
 
     @Override
-    public UserResponse saveUser(UserCreateRequest request) {
+    @Transactional
+    public UserResponse register(UserRegisterRequest request) {
+        log.info("Registering user with email: {}", request.getEmail());
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new DuplicateEmailException("Email already exists");
+            throw new UserAlreadyExistsException("User with email " + request.getEmail() + " already exists");
         }
 
-        User user = new User();
-
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
-        user.setPassword(
-                passwordEncoder.encode(request.getPassword())
-        );
-        user.setPhoneNumber(request.getPhoneNumber());
-        user.setRole(request.getRole());
+        User user = User.builder()
+                .name(request.getName())
+                .email(request.getEmail())
+                .password(request.getPassword())
+                .role(request.getRole())
+                .phoneNumber(request.getPhoneNumber())
+                .build();
 
         User savedUser = userRepository.save(user);
+
+        logActivity(savedUser.getId(), "USER_REGISTRATION",
+                "User registered with role: " + savedUser.getRole());
 
         return mapToResponse(savedUser);
     }
 
     @Override
-    public List<UserResponse> getAllUsers() {
-
-        return userRepository.findAll()
-                .stream()
-                .map(this::mapToResponse)
-                .toList();
-
-    }
-
-    @Override
-    public UserResponse getUserById(Long id) {
-
-        User user = userRepository.findById(id)
-                .orElseThrow(
-                        () -> new RuntimeException("User not found")
-                );
-
-        return mapToResponse(user);
-
-    }
-
-    @Override
-    public UserResponse updateUser(Long id, UserUpdateRequest request) {
-
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
-
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
-        user.setPhoneNumber(request.getPhoneNumber());
-        user.setRole(request.getRole());
-
-        User updateUser = userRepository.save(user);
-        return mapToResponse(updateUser);
-    }
-
-    @Override
-    public void deleteUser(Long id) {
-
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
-
-        userRepository.delete(user);
-    }
-
-    @Override
-    public LoginResponse loginUser(LoginRequest request) {
-
+    @Transactional(readOnly = true)
+    public UserResponse login(UserLoginRequest request) {
+        log.info("Authenticating user with email: {}", request.getEmail());
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(()-> new InvalidCredentialsException("Invalid email or password"));
+                .orElseThrow(() -> new InvalidCredentialsException("Invalid email or password"));
 
-        if (!passwordEncoder.matches(request.getPassword(),user.getPassword())){
+        if (!user.getPassword().equals(request.getPassword())) {
             throw new InvalidCredentialsException("Invalid email or password");
         }
 
-        String token = jwtService.generateToken(user.getEmail());
+        logActivity(user.getId(), "USER_LOGIN", "User logged in successfully");
 
-        return new LoginResponse(
-                token,
-                mapToResponse(user)
-        );
+        return mapToResponse(user);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserResponse getUserById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
+        return mapToResponse(user);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserResponse getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
+        return mapToResponse(user);
+    }
+
+    @Override
+    @Transactional
+    public UserResponse updateUser(Long id, UserUpdateRequest request) {
+        log.info("Updating user with ID: {}", id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
+
+        if (request.getName() != null && !request.getName().isBlank()) {
+            user.setName(request.getName());
+        }
+        if (request.getPhoneNumber() != null) {
+            user.setPhoneNumber(request.getPhoneNumber());
+        }
+        if (request.getRole() != null) {
+            user.setRole(request.getRole());
+        }
+        if (request.getPassword() != null && !request.getPassword().isBlank()) {
+            user.setPassword(request.getPassword());
+        }
+
+        User updatedUser = userRepository.save(user);
+        logActivity(updatedUser.getId(), "PROFILE_UPDATE", "User profile updated");
+
+        return mapToResponse(updatedUser);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserResponse> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserActivityLogResponse> getUserHistory(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new ResourceNotFoundException("User not found with ID: " + id);
+        }
+        return activityLogRepository.findByUserIdOrderByTimestampDesc(id).stream()
+                .map(logItem -> UserActivityLogResponse.builder()
+                        .id(logItem.getId())
+                        .userId(logItem.getUserId())
+                        .activityType(logItem.getActivityType())
+                        .description(logItem.getDescription())
+                        .timestamp(logItem.getTimestamp())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void logActivity(Long userId, String activityType, String description) {
+        UserActivityLog activityLog = UserActivityLog.builder()
+                .userId(userId)
+                .activityType(activityType)
+                .description(description)
+                .build();
+        activityLogRepository.save(activityLog);
     }
 
     private UserResponse mapToResponse(User user) {
@@ -121,11 +157,10 @@ public class UserServiceImpl implements UserService {
                 .id(user.getId())
                 .name(user.getName())
                 .email(user.getEmail())
-                .phoneNumber(user.getPhoneNumber())
                 .role(user.getRole())
+                .phoneNumber(user.getPhoneNumber())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .build();
     }
-
 }

@@ -10,6 +10,10 @@ spring:
 
   cloud:
     gateway:
+      discovery:
+        locator:
+          enabled: false
+          lower-case-service-id: true
       server:
         webflux:
           routes:
@@ -26,14 +30,33 @@ spring:
                 - Path=/vehicle-service/**
               filters:
                 - StripPrefix=1
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - PATCH
+              - OPTIONS
+            allowedHeaders: "*"
 
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
 
 management:
   endpoints:
     web:
       exposure:
         include: "*"
+  endpoint:
+    health:
+      show-details: always

@@ -3,6 +3,7 @@ package lk.ijse.userservice.dtos;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lk.ijse.userservice.entity.Role;
 import lombok.*;
 
@@ -18,21 +19,17 @@ import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
 @Data
+@Builder
 public class UserUpdateRequest {
 
-    @NotBlank
+    @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
     private String name;
-
-    @NotBlank
-    @Email
-    private String email;
 
     private String phoneNumber;
 
-    @NotNull
     private Role role;
+
+    private String password;
 
 }

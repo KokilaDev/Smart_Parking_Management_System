@@ -1,7 +1,6 @@
 package lk.ijse.userservice.service;
 
 import lk.ijse.userservice.dtos.*;
-import lk.ijse.userservice.entity.User;
 
 import java.util.List;
 
@@ -15,10 +14,20 @@ import java.util.List;
  * --------------------------------------------
  */
 public interface UserService {
-    UserResponse saveUser(UserCreateRequest request);
-    List<UserResponse> getAllUsers();
+
+    UserResponse register(UserRegisterRequest request);
+
+    UserResponse login(UserLoginRequest request);
+
     UserResponse getUserById(Long id);
+
+    UserResponse getUserByEmail(String email);
+
     UserResponse updateUser(Long id, UserUpdateRequest request);
-    void deleteUser(Long id);
-    LoginResponse loginUser(LoginRequest request);
+
+    List<UserResponse> getAllUsers();
+
+    List<UserActivityLogResponse> getUserHistory(Long id);
+
+    void logActivity(Long userId, String activityType, String description);
 }

@@ -1,26 +1,28 @@
-package lk.ijse.userservice.util;
+package lk.ijse.vehicleservice.dtos;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * --------------------------------------------
  * Author: Kokila Dewmini
  * GitHub: https://github.com/KokilaDev
  * --------------------------------------------
- * Created: 8/15/2026 11:23 PM
+ * Created: 8/16/2026 10:19 PM
  * Project: SPMS
  * --------------------------------------------
  */
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class APIResponse<T> {
+public class UserResponse {
 
-    private int code;
-    private String message;
-    private T data;
-
+    private Long id;
+    private String name;
+    private String email;
+    private String role;
 }

@@ -1,5 +1,6 @@
 package lk.ijse.vehicleservice.service;
 
+import lk.ijse.vehicleservice.client.UserServiceClient;
 import lk.ijse.vehicleservice.dtos.VehicleCreateRequest;
 import lk.ijse.vehicleservice.dtos.VehicleResponse;
 import lk.ijse.vehicleservice.dtos.VehicleUpdateRequest;
@@ -27,6 +28,7 @@ import java.util.List;
 public class VehicleServiceImpl implements VehicleService {
 
     private final VehicleRepository vehicleRepository;
+    private final UserServiceClient userServiceClient;
 
     @Override
     public VehicleResponse saveVehicle(VehicleCreateRequest request) {

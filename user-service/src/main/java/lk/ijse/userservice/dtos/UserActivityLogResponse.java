@@ -2,6 +2,8 @@ package lk.ijse.userservice.dtos;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 /**
  * --------------------------------------------
  * Author: Kokila Dewmini
@@ -13,13 +15,14 @@ import lombok.*;
  */
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-public class LoginResponse {
+@AllArgsConstructor
+@Builder
+public class UserActivityLogResponse {
 
-    private String token;
-    private UserResponse user;
-
+    private Long id;
+    private Long userId;
+    private String activityType;
+    private String description;
+    private LocalDateTime timestamp;
 }

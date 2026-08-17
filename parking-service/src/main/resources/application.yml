@@ -7,9 +7,9 @@ spring:
   config:
     import: configserver:http://localhost:8888
   datasource:
-    url: jdbc:mysql://localhost:3306/spms_parking_db?createDatabaseIfNotExist=true
-    username: root
-    password: 1234
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/spms_parking_db?createDatabaseIfNotExist=true
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:

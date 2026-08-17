@@ -41,7 +41,7 @@ spring:
             - id: payment-service-route
               uri: lb://PAYMENT-SERVICE
               predicates:
-                - Path=/api/payments/**
+                - Path=/payment-service/**
               filters:
                 - StripPrefix=1
 

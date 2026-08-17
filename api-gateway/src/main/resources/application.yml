@@ -38,6 +38,13 @@ spring:
               filters:
                 - StripPrefix=1
 
+            - id: payment-service-route
+              uri: lb://PAYMENT-SERVICE
+              predicates:
+                - Path=/api/payments/**
+              filters:
+                - StripPrefix=1
+
       globalcors:
         cors-configurations:
           '[/**]':

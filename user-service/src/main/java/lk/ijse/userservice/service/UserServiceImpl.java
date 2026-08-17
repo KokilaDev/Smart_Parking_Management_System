@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public UserResponse login(UserLoginRequest request) {
         log.info("Authenticating user with email: {}", request.getEmail());
         User user = userRepository.findByEmail(request.getEmail())

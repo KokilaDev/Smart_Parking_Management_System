@@ -13,6 +13,6 @@ public enum VehicleType {
     CAR,
     MOTORCYCLE,
     SUV,
-    TRACK,
+    TRUCK,
     EV
 }
